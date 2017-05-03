@@ -77,14 +77,14 @@ function delete_food_eatings(){
 				if(i == limit-1){
 					month = prev_date.getMonth()+1;
 					stat.day[n+1] = current_date.getUTCDate()+"."+month+"."+current_date.getFullYear();
-					stat.kcal[n] = day_kcal;
+					stat.kcal[n] = day_kcal/100;
 					day_kcal = 0;
 				}
 				
 				h_list += "<tr>"
 					+ "<td>" +h_data.food_name[i]+ "</td>"
 					+ "<td>" +h_data.mass_in_grams[i]+ "g</td>"
-					+ "<td>" +h_data.mass_in_grams[i]*h_data.kcal_density[i]+"kcal (" +h_data.kcal_density[i]+ "kcal/g )</td>"
+					+ "<td>" +h_data.mass_in_grams[i]*h_data.kcal_density[i]/100+"kcal (" +h_data.kcal_density[i]+ "kcal/100g )</td>"
 					+ "<td> on " +h_data.date_time[i]+ "</td>"
 					+ "<td class='delete_historical_food_eating_img' onclick=\"form_submit('#historical_list_id"+i+"', 'action.php?action=delete_user_historical_food')\">"
 					+ 	"<img src='img/cross.png'>"

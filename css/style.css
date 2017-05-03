@@ -31,11 +31,11 @@ img {
     border: medium none;
 }
 #add_food_popup {
-    left: -250px;
+    left: -300px;
     margin-left: 50%;
     margin-top: 12px;
     position: absolute;
-    width: 500px;
+    width: 600px;
 }
 #add_food_popup input {
     font-size: 14px;
@@ -47,11 +47,11 @@ img {
     margin-right: 15px;
 }
 #delete_food_popup {
-    left: -153px;
+    left: -150px;
     margin-left: 50%;
     margin-top: 10px;
     position: absolute;
-    width: 220px;
+    width: 300px;
 }
 #delete_food_popup select {
     float: left;
@@ -241,7 +241,7 @@ img {
     float: left;
     font-size: 18px;
     list-style: outside none none;
-    padding: 10px 30px;
+    padding: 10px 25px;
     text-align: center;
 }
 .main_menu li:hover {
@@ -391,14 +391,12 @@ img {
     background-color: #b7b7b7;
     cursor: pointer;
 }
-.delete_historical_food_eating_img{
-	
+.delete_historical_food_eating_img {
 }
-.delete_historical_food_eating_img:hover{
-	background-color: #cecece;
+.delete_historical_food_eating_img:hover {
+    background-color: #cecece;
     border-radius: 5px;
     cursor: pointer;
 }
-.delete_historical_food_eating_img img{
-	
+.delete_historical_food_eating_img img {
 }
