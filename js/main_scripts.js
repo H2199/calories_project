@@ -10,9 +10,9 @@ function form_submit(form_div, destination){
 		data: $(form_div).serialize(),
 		success: function(data){
 			$("#answer").html(data);
+			location.reload(); 
 		}
 	});
-	location.reload(); 
 }
 function add_new_food_eatings(){
 	
@@ -53,6 +53,7 @@ function delete_food_eatings(){
 			var h_data = data; // food_name, mass_in_grams, date_time, kcal_density, historical_food_eating_id
 			var limit = h_data.historical_food_eating_id.length;
 			var h_list = "<table>";
+			var h_forms = "";
 			var day_kcal = 0;
 			var stat = {'day':{}, 'kcal':{}};
 			var n = 0;
@@ -72,18 +73,33 @@ function delete_food_eatings(){
 					n++;
 					//alert(JSON.stringify(stat));
 				}
-				
 				day_kcal = day_kcal+h_data.mass_in_grams[i]*h_data.kcal_density[i];
+				if(i == limit-1){
+					month = prev_date.getMonth()+1;
+					stat.day[n+1] = current_date.getUTCDate()+"."+month+"."+current_date.getFullYear();
+					stat.kcal[n] = day_kcal;
+					day_kcal = 0;
+				}
 				
+				h_list += "<tr>"
+					+ "<td>" +h_data.food_name[i]+ "</td>"
+					+ "<td>" +h_data.mass_in_grams[i]+ "g</td>"
+					+ "<td>" +h_data.mass_in_grams[i]*h_data.kcal_density[i]+"kcal (" +h_data.kcal_density[i]+ "kcal/g )</td>"
+					+ "<td> on " +h_data.date_time[i]+ "</td>"
+					+ "<td class='delete_historical_food_eating_img' onclick=\"form_submit('#historical_list_id"+i+"', 'action.php?action=delete_user_historical_food')\">"
+					+ 	"<img src='img/cross.png'>"
+					+ "</td>"
+					+ "</tr>";
 				
-				h_list += "<tr><td>" +h_data.food_name[i]+ "</td><td>" +h_data.mass_in_grams[i]+ "g</td><td>"+h_data.mass_in_grams[i]*h_data.kcal_density[i]+"kcal (" +h_data.kcal_density[i]+ "kcal/g )</td><td> on " +h_data.date_time[i]+ "</td></tr>";
+				h_forms += "<form id='historical_list_id" +i+ "'><input type='hidden' value='" +h_data.historical_food_eating_id[i]+ "' name='historical_food_id'></form>";
 			}
 			h_list += "</table>";
 			$('#historical_list_of_eatings').html(h_list);
+			$('#historical_list_of_eatings').append(h_forms);
 			
 			var daily_report = "<table>";
 			
-			for(i = 0; i < n; i++){
+			for(i = 0; i < n+1; i++){
 				daily_report += "<tr><td>Day: " + stat.day[i] + " sum:</td> <td>" + stat.kcal[i] + "kcal</td></tr>";
 			}
 			daily_report += "</table>";

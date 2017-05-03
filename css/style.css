@@ -391,3 +391,14 @@ img {
     background-color: #b7b7b7;
     cursor: pointer;
 }
+.delete_historical_food_eating_img{
+	
+}
+.delete_historical_food_eating_img:hover{
+	background-color: #cecece;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.delete_historical_food_eating_img img{
+	
+}

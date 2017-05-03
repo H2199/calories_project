@@ -105,7 +105,7 @@ graph
 					</form>
 					<div class="add_food_button" onclick="add_new_food_eatings()"><img src="img/plus.png"></div>
 					<div class="delete_food_button" onclick="delete_food_eatings()"><img src="img/minus.png"></div>
-					<div class="save_food_button" onclick="form_submit('#add_food_eatings', 'action.php?action=add_user_historical_food')">Add the food</div>
+					<div class="save_food_button">Add the food</div>
 				</div>
 				<div class="right_part">
 					<?php //<div class="privacy_setting">on/off</div> ?>
