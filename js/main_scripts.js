@@ -1,3 +1,9 @@
+/*
+function reverse_table(table, append_to){
+	$.fn.reverse = [].reverse;
+	$(table).reverse().appendTo(append_to);
+}
+	*/		
 function open_popup(popup){ // takes cottages through ajax query
 	$(popup).toggle();	
 }
@@ -52,7 +58,7 @@ function delete_food_eatings(){
 		success: function(data){
 			var h_data = data; // food_name, mass_in_grams, date_time, kcal_density, historical_food_eating_id
 			var limit = h_data.historical_food_eating_id.length;
-			var h_list = "<table>";
+			var h_list = "<table id='table_to_reverse'> <tbody>";
 			var h_forms = "";
 			var day_kcal = 0;
 			var stat = {'day':{}, 'kcal':{}};
@@ -66,26 +72,26 @@ function delete_food_eatings(){
 				var current_date = new Date(h_data.date_time[i]);
 				var prev_date = new Date(h_data.date_time[prev]);
 				if(current_date > prev_date){
+					
 					month = prev_date.getMonth()+1;
 					stat.day[n+1] = current_date.getUTCDate()+"."+month+"."+current_date.getFullYear();
-					stat.kcal[n] = day_kcal;
+					stat.kcal[n] = day_kcal/100;
+					h_list += "<tr class='historical_list_day_summary' onclick=\"open_popup('.table_day"+n+"')\"><th>Day: </th><th> " + stat.day[n] + "</th><th> sum: </th><th> " + stat.kcal[n] + " kcal</th></tr>"; //DAY SUMMARY
 					day_kcal = 0;
 					n++;
-					//alert(JSON.stringify(stat));
 				}
 				day_kcal = day_kcal+h_data.mass_in_grams[i]*h_data.kcal_density[i];
 				if(i == limit-1){
 					month = prev_date.getMonth()+1;
-					stat.day[n+1] = current_date.getUTCDate()+"."+month+"."+current_date.getFullYear();
 					stat.kcal[n] = day_kcal/100;
 					day_kcal = 0;
 				}
 				
-				h_list += "<tr>"
+				h_list += "<tr class='table_day"+n+"' style='display:none'>"
 					+ "<td>" +h_data.food_name[i]+ "</td>"
 					+ "<td>" +h_data.mass_in_grams[i]+ "g</td>"
-					+ "<td>" +h_data.mass_in_grams[i]*h_data.kcal_density[i]/100+"kcal (" +h_data.kcal_density[i]+ "kcal/100g )</td>"
-					+ "<td> on " +h_data.date_time[i]+ "</td>"
+					+ "<td>" +h_data.mass_in_grams[i]*h_data.kcal_density[i]/100+"kcal </td>"
+					+ "<td> (" +h_data.kcal_density[i]+ "kcal/100g )</td>"
 					+ "<td class='delete_historical_food_eating_img' onclick=\"form_submit('#historical_list_id"+i+"', 'action.php?action=delete_user_historical_food')\">"
 					+ 	"<img src='img/cross.png'>"
 					+ "</td>"
@@ -93,19 +99,13 @@ function delete_food_eatings(){
 				
 				h_forms += "<form id='historical_list_id" +i+ "'><input type='hidden' value='" +h_data.historical_food_eating_id[i]+ "' name='historical_food_id'></form>";
 			}
-			h_list += "</table>";
+			h_list += "<tr class='historical_list_day_summary' onclick=\"open_popup('.table_day"+n+"')\"><th>Day:</th><th> " + stat.day[n] + "</th><th> sum: </th><th> " + stat.kcal[n] + " kcal</th></tr>"; //DAY SUMMARY (end day)
+			
+			h_list += "</tbody></table>";
 			$('#historical_list_of_eatings').html(h_list);
+		
+			
 			$('#historical_list_of_eatings').append(h_forms);
-			
-			var daily_report = "<table>";
-			
-			for(i = 0; i < n+1; i++){
-				daily_report += "<tr><td>Day: " + stat.day[i] + " sum:</td> <td>" + stat.kcal[i] + "kcal</td></tr>";
-			}
-			daily_report += "</table>";
-			//alert(JSON.stringify(stat));
-			//alert(daily_report);
-			$('#historical_list_of_eatings').append(daily_report);
 		}
 	});
 }
@@ -137,7 +137,7 @@ window.onload = function(){
 	});
 	
 	create_historical_list();
-	
+
 	
 	
 	

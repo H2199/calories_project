@@ -325,11 +325,21 @@ img {
 }
 #historical_list_of_eatings {
 }
+#historical_list_of_eatings  th{
+	padding: 4px 0;
+    width: 128px;
+}
+.historical_list_day_summary:hover{
+	background-color: #cecece;
+    cursor: pointer;
+}
 #historical_list_of_eatings tr {
     border-bottom: 1px solid #000;
+	width: 500px;
 }
 #historical_list_of_eatings td {
-    padding: 4px 20px;
+    padding: 4px 0;
+
 }
 .historical_list_day_ccal {
     text-align: center;
