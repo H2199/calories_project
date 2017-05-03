@@ -106,6 +106,8 @@ function delete_food_eatings(){
 		
 			
 			$('#historical_list_of_eatings').append(h_forms);
+			
+			$('#table_to_reverse').html($('tr').get().reverse()); //reverse the table to keep newest on the top
 		}
 	});
 }
@@ -133,11 +135,10 @@ window.onload = function(){
 	$('.delete_food_button').click(delete_food_eatings());
 	$('.save_food_button').click( function(){
 		form_submit('#add_food_eatings', 'action.php?action=add_user_historical_food');
-		create_historical_list();
+		//create_historical_list();
 	});
 	
 	create_historical_list();
-
 	
 	
 	
