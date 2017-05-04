@@ -1,35 +1,28 @@
-/*
-function reverse_table(table, append_to){
-	$.fn.reverse = [].reverse;
-	$(table).reverse().appendTo(append_to);
-}
-	*/		
-function open_popup(popup){ // takes cottages through ajax query
+function open_popup(popup){ // toggle of any element
 	$(popup).toggle();	
 }
-
-function form_submit(form_div, destination){
+function form_submit(form_div, destination_url){ //send any form to any url and reaload the page to show changes
 	$.ajax({
 		type: 'POST',
-		url: destination,
+		url: destination_url,
 		async: false,
 		data: $(form_div).serialize(),
 		success: function(data){
-			$("#answer").html(data);
 			location.reload(); 
 		}
 	});
 }
-function add_new_food_eatings(){
-	
-	var food_eatings = "<li class='food_type_li'>"
+function add_new_food_eatings(){ //Add 3 LI to the UL (1 raw)
+	var food_eatings = ""
+	+"<li class='food_type_li'>"
 	+	"<select id='food_type' class='styleSelect' name='food_id[]'>"
 	+		"<option value='' selected='selected'>what</option>"
 	+		food_list
 	+	"</select>"
 	+"</li>"
 	+"<li class='food_amount_li'>"
-	+	"<input id='food_amount' name='food_mass[]' type='text' value=''>g/ml</li>"
+	+	"<input id='food_amount' name='food_mass[]' type='text' value=''>g/ml"
+	+"</li>"
 	+"<li class='food_time_li'>"
 	+	"<input class='food_eating_time' name='food_eating_time[]' type='text' value='when'>"
 	+"</li>";
@@ -47,11 +40,10 @@ function add_new_food_eatings(){
 	});
 }
 function delete_food_eatings(){
-	$('#add_food_eatings_ul > li').slice(-3).remove();
-
+	$('#add_food_eatings_ul > li').slice(-3).remove(); // remove last 3 LI from the UL (1 raw)
 }
- function create_historical_list(){
-	$.ajax({
+function create_historical_list(){
+	$.ajax({ //GET user histroy
 		type: 'POST',
 		url: 'action.php?action=get_user_history&user_unique_id='+$('#user_unique_id').html(),
 		dataType: "json",
@@ -63,29 +55,41 @@ function delete_food_eatings(){
 			var day_kcal = 0;
 			var stat = {'day':{}, 'kcal':{}};
 			var n = 0;
-			d = new Date(h_data.date_time[0]);
-			month = d.getMonth()+1;
-			stat.day[0] = d.getUTCDate()+"."+month+"."+d.getFullYear();
+			
 			for (var i = 0; i < limit; i++) {
-
+				//Date for the fist day
+				if(i==0){
+					d = new Date(h_data.date_time[i]);
+					month = d.getMonth()+1;
+					stat.day[i] = d.getUTCDate()+"."+month+"."+d.getFullYear();
+				}
+				
 				var prev = i-1;
 				var current_date = new Date(h_data.date_time[i]);
 				var prev_date = new Date(h_data.date_time[prev]);
-				if(current_date > prev_date){
-					
+				if(current_date > prev_date){ //get day summary if day has switched
 					month = prev_date.getMonth()+1;
 					stat.day[n+1] = current_date.getUTCDate()+"."+month+"."+current_date.getFullYear();
 					stat.kcal[n] = day_kcal/100;
-					h_list += "<tr class='historical_list_day_summary' onclick=\"open_popup('.table_day"+n+"')\"><th>Day: </th><th> " + stat.day[n] + "</th><th> sum: </th><th> " + stat.kcal[n] + " kcal</th></tr>"; //DAY SUMMARY
+					h_list += ""
+					+"<tr class='historical_list_day_summary' onclick=\"open_popup('.table_day"+n+"')\">"
+					+ 	"<th>Day: </th>"
+					+ 	"<th> " + stat.day[n] + "</th>"
+					+ 	"<th> sum: </th>"
+					+ 	"<th> " + stat.kcal[n] + " kcal</th>"
+					+"</tr>";
 					day_kcal = 0;
 					n++;
 				}
 				day_kcal = day_kcal+h_data.mass_in_grams[i]*h_data.kcal_density[i];
+				
+				//Summary for the last day
 				if(i == limit-1){
 					month = prev_date.getMonth()+1;
 					stat.kcal[n] = day_kcal/100;
 					day_kcal = 0;
 				}
+				
 				
 				h_list += "<tr class='table_day"+n+"' style='display:none'>"
 					+ "<td>" +h_data.food_name[i]+ "</td>"
@@ -134,13 +138,10 @@ window.onload = function(){
 	$('.add_food_button').click(add_new_food_eatings(food_list));
 	$('.delete_food_button').click(delete_food_eatings());
 	$('.save_food_button').click( function(){
-		form_submit('#add_food_eatings', 'action.php?action=add_user_historical_food');
+	form_submit('#add_food_eatings', 'action.php?action=add_user_historical_food');
 		//create_historical_list();
 	});
 	
 	create_historical_list();
 	
-	
-	
-
 }
